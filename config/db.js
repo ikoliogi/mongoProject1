@@ -11,4 +11,18 @@ global.User = mongoose.model("User", {
     email: String
 });
 
-// global.User visible in all files (and app.js)
+global.Product = mongoose.model("Product", {
+    category: mongoose.Types.ObjectId, // category._id  type is neither a number nor string, use
+    title: String,
+    miniDescription: String,
+    description: String,
+    price: Number,
+    sale: Number,
+    photo: String
+});
+
+global.Category = mongoose.model("Category", {
+   title: String
+});
+
+// global.* visible in all files (and app.js)

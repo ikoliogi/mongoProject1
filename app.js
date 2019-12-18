@@ -7,6 +7,11 @@ require('dotenv').config();
 // Require Mongodb connection and Models
 require("./config/db");
 
+// Require Controllers
+const UsersController = require("./controllers/UsersController");
+const ProductsController = require("./controllers/ProductsController");
+const CategoriesController = require("./controllers/CategoriesController");
+
 // Initialize my express app
 const app = express();
 app.listen(process.env.PORT);
@@ -19,41 +24,28 @@ app.get("/", (req, res) => {
     res.send("OK");
 });
 
-app.get("/users", (req, res) => {
-    User.find({}, (err, users) => {
-        res.json(users);
-    });
-});
 
-app.get("/users/:userId", (req, res) => {
-    const userId = req.params.userId;
-    User.findById(userId, (err, users) => {
-        res.json(users);
-    });
-});
+// User Routes
+app.get("/users", UsersController.list);
+app.get("/users/:userId", UsersController.getOne);
+app.post("/users", UsersController.create);
+app.delete("/users/:userId", UsersController.deleteOne);
+app.put("/users/:userId", UsersController.update);
 
-app.post("/users", (req, res) => {
-    const u = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email
-    });
-    u.save().then(() => {
-        res.json({
-            message: "user created"
-        });
-    });
-});
+// Products Routes
+app.get("/products", ProductsController.list);
+app.get("/products/:productId", ProductsController.getOne);
+app.post("/products", ProductsController.create);
+app.delete("/products/:productId", ProductsController.deleteOne);
+app.put("/products/:productId", ProductsController.update);
+app.get("/products/cat/:categoryId", ProductsController.listByCategory);
 
-app.delete("/users/:userId", (req, res) => {
-    const userId = req.params.userId;
-    User.deleteOne({_id: userId}, (err) => {
-        res.json({
-            message: "user deleted"
-        });
-    });
-});
-
+//Categories Routes
+app.get("/categories", CategoriesController.list);
+app.get("/categories/:categoryId", CategoriesController.getOne);
+app.post("/categories", CategoriesController.create);
+app.delete("/categories/:categoryId", CategoriesController.deleteOne);
+app.put("/categories/:categoryId", CategoriesController.update);
 
 /*MongoDB Compass*/
 
